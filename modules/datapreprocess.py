@@ -1,8 +1,8 @@
-from constants import *
+from definitions import *
 import pandas as pd
 from datetime import datetime
 from pandas.tseries.offsets import MonthEnd
-import os
+
 
 def preprocess_month(month):
     data = get_traffic_data(month)
@@ -33,7 +33,7 @@ def save_processed_traffic_data(df, month):
     df.to_csv(filename + CSV_SUFFIX)
 
 def get_processed_traffic_data_filename_without_extension(month):
-    project_directory = root_directory()
+    project_directory = get_root_directory()
 
     # We omit the file extension so we can save both .csv and .parquet
     path = PROCESSED_DATA_FOLDER
@@ -45,7 +45,7 @@ def get_traffic_data(month):
     return pd.read_csv(filename, sep = ",")
 
 def get_raw_traffic_data_filename(month):
-    project_directory = root_directory()
+    project_directory = get_root_directory()
 
     path = RAW_DATA_FOLDER
     extension = CSV_SUFFIX
@@ -113,7 +113,7 @@ def add_station_data(df):
         right_on = COLUMN_STATION_ID_OLD, how = "inner")
 
 def get_station_data():
-    project_directory = root_directory()
+    project_directory = get_root_directory()
 
     stations = pd.read_csv(project_directory + RAW_DATA_FOLDER + STATION_DATA_FILENAME + CSV_SUFFIX)
     stations = stations.drop([COLUMN_STATION_FID_OLD, COLUMN_STATION_NAME_FINNISH_OLD, COLUMN_STATION_NAME_SWEDISH_OLD, 
@@ -121,5 +121,4 @@ def get_station_data():
         COLUMN_STATION_OPERAATTOR_OLD], axis = 1)
     return stations
 
-def root_directory():
-    return os.path.dirname(os.path.realpath(__file__))
+

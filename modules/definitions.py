@@ -1,4 +1,6 @@
-# All constants needed in one handy place. 
+# All general definitions
+
+from pathlib import Path
 
 # Path constants
 
@@ -48,3 +50,8 @@ COLUMN_NUMBER_OF_DEPARTING = "Outgoing"
 YEAR_2019 = "2019-"
 FIRST_DAY_MIDNIGHT = "-01 00:00:00"
 FIRST_DAY_LAST_HOUR = "-01 23:00:00"
+
+# Functions
+
+def get_root_directory() -> Path:
+    return str(Path(__file__).parent.parent)
