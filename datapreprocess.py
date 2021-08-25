@@ -1,6 +1,8 @@
 from constants import *
 import pandas as pd
 from datetime import datetime
+from pandas.tseries.offsets import MonthEnd
+import os
 
 def preprocess_month(month):
     data = get_traffic_data(month)
@@ -9,13 +11,11 @@ def preprocess_month(month):
         data.pipe(time_columns_to_datetime)
             .pipe(remove_excess_columns)
             .pipe(calculate_number_of_moving_bikes_per_station)
-            .pipe(fill_all_time_slots_for_stations, arg2 = month)
+            .pipe(fill_all_time_slots_for_stations, month)
             .pipe(add_station_data)
+            .pipe(save_processed_traffic_data, month)
         )
-    # Save the processed data for use
-    filename = get_filename(month)
-    processed_data.to_parquet(PROCESSED_DATA_FOLDER + filename + 
-        PROCESSED_DATA_SUFFIX + PARQUET_SUFFIX)
+    
 
 def time_columns_to_datetime(df):
     # Make time a datetime object to ease handling. Also floor to starting hour
@@ -25,15 +25,32 @@ def time_columns_to_datetime(df):
         errors = "ignore").dt.floor(freq = "H")
     return df
 
+def save_processed_traffic_data(df, month):
+    filename = get_processed_traffic_data_filename_without_extension(month)
+
+    # Right now we also save the csv for testing purposes
+    df.to_parquet(filename + PARQUET_SUFFIX)
+    df.to_csv(filename + CSV_SUFFIX)
+
+def get_processed_traffic_data_filename_without_extension(month):
+    project_directory = root_directory()
+
+    # We omit the file extension so we can save both .csv and .parquet
+    path = PROCESSED_DATA_FOLDER
+    filename = YEAR_PREFIX + '{:02.0f}'.format(month)
+    return project_directory + path + filename 
+
 def get_traffic_data(month):
-    filename = get_filename(month)
+    filename = get_raw_traffic_data_filename(month)
     return pd.read_csv(filename, sep = ",")
 
-def get_filename(month):
+def get_raw_traffic_data_filename(month):
+    project_directory = root_directory()
+
     path = RAW_DATA_FOLDER
     extension = CSV_SUFFIX
     filename = YEAR_PREFIX + '{:02.0f}'.format(month)
-    return path + filename + extension
+    return project_directory + path + filename + extension
 
 def remove_excess_columns(df):
     return df.drop(columns=
@@ -96,8 +113,13 @@ def add_station_data(df):
         right_on = COLUMN_STATION_ID_OLD, how = "inner")
 
 def get_station_data():
-    stations = pd.read_csv(RAW_DATA_FOLDER + STATION_DATA_FILENAME + CSV_SUFFIX)
+    project_directory = root_directory()
+
+    stations = pd.read_csv(project_directory + RAW_DATA_FOLDER + STATION_DATA_FILENAME + CSV_SUFFIX)
     stations = stations.drop([COLUMN_STATION_FID_OLD, COLUMN_STATION_NAME_FINNISH_OLD, COLUMN_STATION_NAME_SWEDISH_OLD, 
         COLUMN_STATION_ADRESS_OLD, COLUMN_STATION_CITY_FINNISH_OLD, COLUMN_STATION_CITY_SWEDISH_OLD, 
         COLUMN_STATION_OPERAATTOR_OLD], axis = 1)
     return stations
+
+def root_directory():
+    return os.path.dirname(os.path.realpath(__file__))
