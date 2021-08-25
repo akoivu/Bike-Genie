@@ -8,7 +8,8 @@ def preprocess_month(month):
         data.pipe(time_columns_to_datetime)
             .pipe(remove_excess_columns)
             .pipe(calculate_number_of_moving_bikes_per_station)
-            .pipe(fill_all_time_slots_for_stations, )
+            .pipe(fill_all_time_slots_for_stations, arg2 = month)
+            .pipe(add_station_data)
         )
     # Save the processed data for use
     filename = get_filename(month)
@@ -73,9 +74,9 @@ def fill_all_time_slots_for_stations(df, month):
 
     return merged_and_filled
 
-def add_station_data():
+def add_station_data(df):
     station_data = get_station_data()
-    return pd.merge(processed, station_data, on = "ID", how = "inner")
+    return pd.merge(df, station_data, on = "ID", how = "inner")
 
 def get_station_data():
   stations = pd.read_csv("/data/raw/Helsingin_ja_Espoon_kaupunkipyöräasemat.csv")
