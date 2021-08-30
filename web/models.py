@@ -8,6 +8,9 @@ class Station(models.Model):
     # TODO: learn proper coordinate handling in Python
     x = models.CharField(max_length=50)
     y = models.CharField(max_length=50)
+    address = models.CharField(max_length=70)
+    city = models.CharField(max_length=20)
+    capacity = models.IntegerField()
 
     class Meta:
         ordering = ['name']
