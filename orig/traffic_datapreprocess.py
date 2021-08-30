@@ -2,6 +2,7 @@ from definitions import *
 import pandas as pd
 from datetime import datetime
 from pandas.tseries.offsets import MonthEnd
+from station_datapreprocess import get_station_data
 
 
 ## Preprocessing of the traffic data
@@ -117,22 +118,4 @@ def add_station_data_to_traffic_data(df):
     return pd.merge(df, station_data, left_on = COLUMN_STATION_ID, 
         right_on = COLUMN_STATION_ID_OLD, how = "inner")
 
-
-## Preprocessing of the station data TODO
-
-
-def get_station_data():
-    project_directory = get_root_directory()
-
-    stations = pd.read_csv(project_directory + RAW_DATA_FOLDER + STATION_DATA_FILENAME + CSV_SUFFIX)
-    
-    return stations
-
-def preprocess_station_data_into_suitable_JSON():
-    station_data = get_station_data()
-
-def drop_columns_of_unused_station_data(df):
-    """Drops the columns that we do not need for the station data. NOTE that this shouldn't be used for the traffic data"""
-    return df.drop([COLUMN_STATION_FID_OLD, COLUMN_STATION_NAME_SWEDISH_OLD, COLUMN_STATION_CITY_SWEDISH_OLD, 
-        COLUMN_STATION_OPERAATTOR_OLD], axis = 1)
 
