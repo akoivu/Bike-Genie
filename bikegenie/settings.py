@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.gis',
-    'web.apps.WebConfig'
+    'web',
 ]
 
 MIDDLEWARE = [
@@ -95,8 +95,11 @@ WSGI_APPLICATION = 'bikegenie.wsgi.application'
 DATABASES = {
     'default': {
          'ENGINE': 'django.contrib.gis.db.backends.postgis',
-         'NAME': 'geodjango',
-         'USER': 'geo',
+         'NAME': 'postgres',
+         'USER': 'postgres',
+         'PASSWORD': 'admin',
+         'HOST': 'localhost',
+         'PORT': '5432'
     },
 }
 

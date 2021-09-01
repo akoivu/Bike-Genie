@@ -1,4 +1,5 @@
-from django.db import models
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.urls import reverse
 
 class Station(models.Model):
@@ -6,11 +7,10 @@ class Station(models.Model):
 
     name = models.CharField(max_length=100)
     # TODO: learn proper coordinate handling in Python
-    x = models.CharField(max_length=50)
-    y = models.CharField(max_length=50)
     address = models.CharField(max_length=70)
     city = models.CharField(max_length=20)
     capacity = models.IntegerField()
+    point = models.PointField(default = Point(0,0))
 
     class Meta:
         ordering = ['name']

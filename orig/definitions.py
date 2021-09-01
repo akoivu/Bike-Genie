@@ -62,6 +62,7 @@ COLUMN_NAME_DJANGO = 'name'
 COLUMN_CITY_DJANGO = 'city'
 COLUMN_ADDRESS_DJANGO = 'address'
 COLUMN_CAPACITY_DJANGO = 'capacity'
+COLUMN_POINT_DJANGO = 'point'
 
 # Model names
 

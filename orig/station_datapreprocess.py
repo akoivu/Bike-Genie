@@ -21,8 +21,7 @@ def preprocess_station_data_into_suitable_json():
 
     # Django wants the fields as their own column
     renamed[COLUMN_FIELDS_DJANGO] = renamed.apply(lambda row : {COLUMN_NAME_DJANGO : row[COLUMN_NAME_DJANGO],
-                                                                          COLUMN_STATION_X : row[COLUMN_STATION_X],
-                                                                          COLUMN_STATION_Y : row[COLUMN_STATION_Y],
+                                                                          COLUMN_POINT_DJANGO : format_django_column_from_row(row),
                                                                           COLUMN_ADDRESS_DJANGO : row[COLUMN_ADDRESS_DJANGO],
                                                                           COLUMN_CITY_DJANGO : row[COLUMN_CITY_DJANGO],
                                                                           COLUMN_CAPACITY_DJANGO :  row[COLUMN_CAPACITY_DJANGO]}, axis = 1)
@@ -48,4 +47,7 @@ def get_processed_station_data_filename():
 def django_column_renamings(df):
     return df.rename(columns = {COLUMN_STATION_ID_OLD : COLUMN_PRIMARY_KEY_DJANGO, COLUMN_STATION_NAME_FINNISH_OLD : COLUMN_NAME_DJANGO, 
         COLUMN_STATION_ADDRESS_FINNISH_OLD : COLUMN_ADDRESS_DJANGO, COLUMN_STATION_CITY_FINNISH_OLD : COLUMN_CITY_DJANGO, COLUMN_STATION_CAPACITY : COLUMN_CAPACITY_DJANGO})
+
+def format_django_column_from_row(row):
+    return "POINT (" + str(row[COLUMN_STATION_X]) + " " + str(row[COLUMN_STATION_Y]) + ")"
 
