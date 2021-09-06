@@ -23,4 +23,4 @@ class Station(models.Model):
         return reverse('model-detail-view', args = [str(self.id)])
 
     def get_number_of_bikes(self):
-        return True
+        return self.name

@@ -5,7 +5,7 @@ from web.models import Station
 
 class StationSerializer(GeoFeatureModelSerializer):
 
-    bike_amount = serializers.BooleanField(source='get_number_of_bikes')
+    bike_amount = serializers.CharField(source='get_number_of_bikes')
     class Meta:
         fields = ("id", "name", "address", "bike_amount")
         geo_field = "point"
