@@ -1,7 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 from django.urls import reverse
-from random import randrange
 
 class Station(models.Model):
     """A bike station"""
@@ -22,5 +21,3 @@ class Station(models.Model):
     def get_absolute_url(self):
         return reverse('model-detail-view', args = [str(self.id)])
 
-    def get_number_of_bikes(self):
-        return self.name
