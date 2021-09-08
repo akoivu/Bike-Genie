@@ -5,10 +5,9 @@ from web.models import Station
 import requests
 import json
 
-def get_amount_list():
+def get_bike_availability_list():
     query = """{
             bikeRentalStations {
-            name
             stationId
             bikesAvailable
         }
@@ -21,15 +20,14 @@ def get_amount_list():
 
 class StationSerializer(GeoFeatureModelSerializer):
 
-    amount_list = get_amount_list()
-    amount = serializers.SerializerMethodField('_asd')
+    amount_list = get_bike_availability_list()
+    amount = serializers.SerializerMethodField('_get_number_of_available_bikes')
 
-    def _asd(self, obj):
+    def _get_number_of_available_bikes(self, obj):
         for row in self.amount_list:
-            if row['stationId'] == str(obj.id):
+            if int(row['stationId']) == obj.id:
                 return row['bikesAvailable']
         return 'Error getting number of available bikes'
-
 
     class Meta:
         fields = ("id", "name", "address", "amount")

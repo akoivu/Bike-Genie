@@ -9,11 +9,6 @@ class StationViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.InBBoxFilter,)
     queryset = Station.objects.all()
 
-        #id = str(station.id)
-        #for row in data:
-        #    if id == row['stationId']:
-        #        station.bike_amount = row['bikesAvailable']
-
     serializer_class = StationSerializer
 
     
